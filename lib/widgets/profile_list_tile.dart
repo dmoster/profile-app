@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 
 class ProfileListTile extends StatefulWidget {
-  const ProfileListTile({Key key, @required this.label, @required this.content})
-      : super(key: key);
+  const ProfileListTile({
+    Key key,
+    @required this.label,
+    @required this.content,
+    @required this.onTap,
+  }) : super(key: key);
 
   final String label;
   final String content;
+  final VoidCallback onTap;
 
   @override
   _ProfileListTileState createState() => _ProfileListTileState();
@@ -31,11 +36,13 @@ class _ProfileListTileState extends State<ProfileListTile> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        subtitle: Text(widget.content,
-            style: TextStyle(
-              color: Color(0xff323232),
-              fontWeight: FontWeight.bold,
-            )),
+        subtitle: Text(
+          widget.content,
+          style: TextStyle(
+            color: Color(0xff323232),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         trailing: Transform.scale(
           scale: 1.5,
           child: Icon(
@@ -43,6 +50,7 @@ class _ProfileListTileState extends State<ProfileListTile> {
             color: Colors.black26,
           ),
         ),
+        onTap: widget.onTap,
       ),
     );
   }

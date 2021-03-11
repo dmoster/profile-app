@@ -1,8 +1,30 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:profile_app/editors/bio_editor.dart';
+import 'package:profile_app/editors/email_editor.dart';
+import 'package:profile_app/editors/name_editor.dart';
+import 'package:profile_app/editors/phone_editor.dart';
+import 'package:profile_app/routes.dart';
 import 'package:profile_app/widgets/profile_list_tile.dart';
 
 class Profile extends StatefulWidget {
-  const Profile({Key key}) : super(key: key);
+  const Profile(
+      {Key key,
+      this.imageUrl,
+      this.firstName,
+      this.lastName,
+      this.phoneNumber,
+      this.emailAddress,
+      this.bioText})
+      : super(key: key);
+
+  final String imageUrl;
+  final String firstName;
+  final String lastName;
+  final String phoneNumber;
+  final String emailAddress;
+  final String bioText;
 
   static const routeName = '/profile';
 
@@ -11,13 +33,24 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  String imageUrl = 'assets/images/me_square.png';
-  String firstName = 'Daniel';
-  String lastName = 'Moster';
-  String phoneNumber = '(513) 725-7100';
-  String emailAddress = 'd.moster@me.com';
-  String bioText =
-      'Hi, my name is Daniel Moster. I am from Ohio but live in Nampa, ID.';
+  String imageUrl;
+  String firstName;
+  String lastName;
+  String phoneNumber;
+  String emailAddress;
+  String bioText;
+
+  @override
+  void initState() {
+    super.initState();
+    imageUrl = 'assets/images/me_square.png';
+    firstName = 'Daniel';
+    lastName = 'Moster';
+    phoneNumber = '(513) 725-7100';
+    emailAddress = 'd.moster@me.com';
+    bioText =
+        'Hi, my name is Daniel Moster. I am from Ohio but live in Nampa, ID.';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +75,7 @@ class _ProfileState extends State<Profile> {
                 backgroundColor: Colors.blue,
                 radius: 72,
                 child: CircleAvatar(
-                  backgroundImage: AssetImage('assets/images/me_square.png'),
+                  backgroundImage: AssetImage(imageUrl),
                   radius: 66,
                 ),
               ),
@@ -51,20 +84,47 @@ class _ProfileState extends State<Profile> {
                   padding: EdgeInsets.symmetric(vertical: 0),
                   children: [
                     ProfileListTile(
-                      label: 'Name',
-                      content: '$firstName $lastName',
-                    ),
+                        label: 'Name',
+                        content: '$firstName $lastName',
+                        onTap: () async {
+                          final updatedNamesJson = await Navigator.pushNamed(
+                            context,
+                            NameEditor.routeName,
+                            arguments: DualStringArguments(firstName, lastName),
+                          );
+                          Map<String, dynamic> updatedNames =
+                              json.decode(updatedNamesJson);
+                          setState(() {
+                            firstName = updatedNames['firstName'];
+                            lastName = updatedNames['lastName'];
+                          });
+                        }),
                     ProfileListTile(
                       label: 'Phone',
                       content: '$phoneNumber',
+                      onTap: () => Navigator.pushNamed(
+                        context,
+                        PhoneEditor.routeName,
+                        arguments: SingleStringArguments(phoneNumber),
+                      ),
                     ),
                     ProfileListTile(
                       label: 'Email',
                       content: '$emailAddress',
+                      onTap: () => Navigator.pushNamed(
+                        context,
+                        EmailEditor.routeName,
+                        arguments: SingleStringArguments(emailAddress),
+                      ),
                     ),
                     ProfileListTile(
                       label: 'Tell us about yourself',
                       content: '$bioText',
+                      onTap: () => Navigator.pushNamed(
+                        context,
+                        BioEditor.routeName,
+                        arguments: SingleStringArguments(bioText),
+                      ),
                     ),
                   ],
                 ),
