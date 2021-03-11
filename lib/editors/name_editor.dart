@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:profile_app/routes.dart';
 
 class NameEditor extends StatefulWidget {
   const NameEditor({Key key, this.firstName, this.lastName}) : super(key: key);

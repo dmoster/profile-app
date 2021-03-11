@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:profile_app/editors/bio_editor.dart';
 import 'package:profile_app/editors/email_editor.dart';
+import 'package:profile_app/editors/image_editor.dart';
 import 'package:profile_app/editors/name_editor.dart';
 import 'package:profile_app/editors/phone_editor.dart';
 import 'package:profile_app/routes.dart';
@@ -71,60 +72,108 @@ class _ProfileState extends State<Profile> {
                 ),
               ),
               SizedBox(height: 16),
-              CircleAvatar(
-                backgroundColor: Colors.blue,
-                radius: 72,
-                child: CircleAvatar(
-                  backgroundImage: AssetImage(imageUrl),
-                  radius: 66,
-                ),
+              Stack(
+                alignment: Alignment.topRight,
+                children: [
+                  CircleAvatar(
+                    backgroundColor: Colors.blue,
+                    radius: 72,
+                    child: CircleAvatar(
+                      backgroundImage: AssetImage(imageUrl),
+                      radius: 66,
+                    ),
+                  ),
+                  CircleAvatar(
+                    backgroundColor: Colors.white,
+                    child: IconButton(
+                      color: Colors.blue,
+                      icon: Icon(Icons.edit),
+                      onPressed: () async {
+                        final updatedImageUrlJson = await Navigator.pushNamed(
+                          context,
+                          ImageEditor.routeName,
+                          arguments: SingleStringArguments(imageUrl),
+                        );
+                        Map<String, dynamic> updatedImageUrl =
+                            json.decode(updatedImageUrlJson);
+                        setState(() {
+                          imageUrl = updatedImageUrl['imageUrl'];
+                        });
+                      },
+                    ),
+                  ),
+                ],
               ),
               Expanded(
                 child: ListView(
                   padding: EdgeInsets.symmetric(vertical: 0),
                   children: [
                     ProfileListTile(
-                        label: 'Name',
-                        content: '$firstName $lastName',
-                        onTap: () async {
-                          final updatedNamesJson = await Navigator.pushNamed(
-                            context,
-                            NameEditor.routeName,
-                            arguments: DualStringArguments(firstName, lastName),
-                          );
-                          Map<String, dynamic> updatedNames =
-                              json.decode(updatedNamesJson);
-                          setState(() {
-                            firstName = updatedNames['firstName'];
-                            lastName = updatedNames['lastName'];
-                          });
-                        }),
+                      label: 'Name',
+                      content: '$firstName $lastName',
+                      onTap: () async {
+                        final updatedNamesJson = await Navigator.pushNamed(
+                          context,
+                          NameEditor.routeName,
+                          arguments: DualStringArguments(firstName, lastName),
+                        );
+                        Map<String, dynamic> updatedNames =
+                            json.decode(updatedNamesJson);
+                        setState(() {
+                          firstName = updatedNames['firstName'];
+                          lastName = updatedNames['lastName'];
+                        });
+                      },
+                    ),
                     ProfileListTile(
                       label: 'Phone',
                       content: '$phoneNumber',
-                      onTap: () => Navigator.pushNamed(
-                        context,
-                        PhoneEditor.routeName,
-                        arguments: SingleStringArguments(phoneNumber),
-                      ),
+                      onTap: () async {
+                        final updatedPhoneNumberJson =
+                            await Navigator.pushNamed(
+                          context,
+                          PhoneEditor.routeName,
+                          arguments: SingleStringArguments(phoneNumber),
+                        );
+                        Map<String, dynamic> updatedPhoneNumber =
+                            json.decode(updatedPhoneNumberJson);
+                        setState(() {
+                          phoneNumber = updatedPhoneNumber['phoneNumber'];
+                        });
+                      },
                     ),
                     ProfileListTile(
                       label: 'Email',
                       content: '$emailAddress',
-                      onTap: () => Navigator.pushNamed(
-                        context,
-                        EmailEditor.routeName,
-                        arguments: SingleStringArguments(emailAddress),
-                      ),
+                      onTap: () async {
+                        final updatedEmailAddressJson =
+                            await Navigator.pushNamed(
+                          context,
+                          EmailEditor.routeName,
+                          arguments: SingleStringArguments(emailAddress),
+                        );
+                        Map<String, dynamic> updatedEmailAddress =
+                            json.decode(updatedEmailAddressJson);
+                        setState(() {
+                          emailAddress = updatedEmailAddress['emailAddress'];
+                        });
+                      },
                     ),
                     ProfileListTile(
                       label: 'Tell us about yourself',
                       content: '$bioText',
-                      onTap: () => Navigator.pushNamed(
-                        context,
-                        BioEditor.routeName,
-                        arguments: SingleStringArguments(bioText),
-                      ),
+                      onTap: () async {
+                        final updatedBioTextJson = await Navigator.pushNamed(
+                          context,
+                          BioEditor.routeName,
+                          arguments: SingleStringArguments(bioText),
+                        );
+                        Map<String, dynamic> updatedBioText =
+                            json.decode(updatedBioTextJson);
+                        setState(() {
+                          bioText = updatedBioText['bioText'];
+                        });
+                      },
                     ),
                   ],
                 ),
