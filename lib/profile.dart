@@ -88,18 +88,11 @@ class _ProfileState extends State<Profile> {
                     child: IconButton(
                       color: Colors.blue,
                       icon: Icon(Icons.edit),
-                      onPressed: () async {
-                        final updatedImageUrlJson = await Navigator.pushNamed(
-                          context,
-                          ImageEditor.routeName,
-                          arguments: SingleStringArguments(imageUrl),
-                        );
-                        Map<String, dynamic> updatedImageUrl =
-                            json.decode(updatedImageUrlJson);
-                        setState(() {
-                          imageUrl = updatedImageUrl['imageUrl'];
-                        });
-                      },
+                      onPressed: () => Navigator.pushNamed(
+                        context,
+                        ImageEditor.routeName,
+                        arguments: SingleStringArguments(imageUrl),
+                      ),
                     ),
                   ),
                 ],
