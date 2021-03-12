@@ -40,6 +40,10 @@ class _NameEditorState extends State<NameEditor> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_outlined),
+          onPressed: () => returnWithoutUpdating(),
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.all(32),
@@ -131,16 +135,7 @@ class _NameEditorState extends State<NameEditor> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero,
                         )),
-                    onPressed: () {
-                      Map<String, dynamic> data = {
-                        'firstName': _firstNameController.text,
-                        'lastName': _lastNameController.text,
-                      };
-                      Navigator.pop(
-                        context,
-                        json.encode(data),
-                      );
-                    },
+                    onPressed: () => returnAndUpdate(),
                   ),
                 ),
               ),
@@ -148,6 +143,28 @@ class _NameEditorState extends State<NameEditor> {
           ],
         ),
       ),
+    );
+  }
+
+  void returnAndUpdate() {
+    Map<String, dynamic> data = {
+      'firstName': _firstNameController.text,
+      'lastName': _lastNameController.text,
+    };
+    Navigator.pop(
+      context,
+      json.encode(data),
+    );
+  }
+
+  void returnWithoutUpdating() {
+    Map<String, dynamic> data = {
+      'firstName': widget.firstName,
+      'lastName': widget.lastName,
+    };
+    Navigator.pop(
+      context,
+      json.encode(data),
     );
   }
 }

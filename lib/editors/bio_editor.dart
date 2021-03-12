@@ -35,6 +35,10 @@ class _BioEditorState extends State<BioEditor> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_outlined),
+          onPressed: () => returnWithoutUpdating(),
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.all(32),
@@ -100,15 +104,7 @@ class _BioEditorState extends State<BioEditor> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero,
                         )),
-                    onPressed: () {
-                      Map<String, dynamic> data = {
-                        'bioText': _bioTextController.text,
-                      };
-                      Navigator.pop(
-                        context,
-                        json.encode(data),
-                      );
-                    },
+                    onPressed: () => returnAndUpdate(),
                   ),
                 ),
               ),
@@ -116,6 +112,26 @@ class _BioEditorState extends State<BioEditor> {
           ],
         ),
       ),
+    );
+  }
+
+  void returnAndUpdate() {
+    Map<String, dynamic> data = {
+      'bioText': _bioTextController.text,
+    };
+    Navigator.pop(
+      context,
+      json.encode(data),
+    );
+  }
+
+  void returnWithoutUpdating() {
+    Map<String, dynamic> data = {
+      'bioText': widget.bioText,
+    };
+    Navigator.pop(
+      context,
+      json.encode(data),
     );
   }
 }
